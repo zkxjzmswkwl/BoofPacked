@@ -1,6 +1,8 @@
 Example Java implementation with JNA.
 
-```
+External.java
+
+```java
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 
@@ -14,7 +16,9 @@ public interface External extends Library{
 }
 ```
 
-```
+Main.java
+
+```java
 public class Main
 {
     public static void main(String[] args) throws InterruptedException
