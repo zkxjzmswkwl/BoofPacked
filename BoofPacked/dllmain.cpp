@@ -36,9 +36,9 @@ void read_proc_mem(char* title, uintptr_t start_loc, uintptr_t out)
     DWORD pid;
 
     if (!hwnd)      return;
-	GetWindowThreadProcessId(hwnd, &pid);
-	HANDLE h = OpenProcess(PROCESS_VM_READ, 0, pid);
+    GetWindowThreadProcessId(hwnd, &pid);
+    HANDLE h = OpenProcess(PROCESS_VM_READ, 0, pid);
 
-	if (!h)     return;
-	ReadProcessMemory(h, (LPCVOID)start_loc, &out, sizeof(out), NULL);
+    if (!h)     return;
+    ReadProcessMemory(h, (LPCVOID)start_loc, &out, sizeof(out), NULL);
 }
