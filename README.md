@@ -24,6 +24,9 @@ public interface BoofPack extends Library {
     PointerByReference get_hwnd_by_title(String windowTitle);
 
     String get_title_by_hwnd(PointerByReference hwnd);
+
+    // See example for this
+    int hash_xxh32(String to_hash);
 }
 ```
 
@@ -49,4 +52,12 @@ public class Main {
         }
     }
 }
+```
+
+What about unsigned integers?
+```java
+String hashMe = "hash me";
+byte[] bytes = ByteBuffer.allocate(4).putInt(BoofPack.INSTANCE.hash_xxh32(hashMe)).array();
+int unprocessedHash = ByteBuffer.wrap(bytes).getInt();
+long processedHash = Integer.toUnsignedLong(hashedStr);
 ```
