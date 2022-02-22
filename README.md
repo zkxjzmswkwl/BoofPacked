@@ -12,21 +12,21 @@ import com.sun.jna.ptr.PointerByReference;
 public interface BoofPack extends Library {
     BoofPack INSTANCE = (BoofPack) Native.load("BoofPacked", BoofPack.class);
 
-    void move_mouse_rel(int x, int y);
+    void moveMouseRel(int x, int y);
 
-    boolean async_keystate(int key);
+    boolean asyncKeystate(int key);
 
-    String get_active_window_title();
+    String getActiveWindowTitle();
 
     // You can pass integers as dwords.
-    void read_proc_mem(String title, /* DWORD */int start_loc, /* DWORD */int out);
+    void readProcMem(String title, /* DWORD */int start_loc, /* DWORD */int out);
 
-    PointerByReference get_hwnd_by_title(String windowTitle);
+    PointerByReference getHWNDByTitle(String windowTitle);
 
-    String get_title_by_hwnd(PointerByReference hwnd);
+    String getTitleByHWND(PointerByReference hwnd);
 
     // See example for this
-    int hash_xxh32(String to_hash);
+    int hashXXH32(String to_hash);
 }
 ```
 
@@ -37,7 +37,7 @@ import com.sun.jna.ptr.PointerByReference;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        PointerByReference spotifyHwnd = BoofPack.INSTANCE.get_hwnd_by_title("Spotify Premium");
+        PointerByReference spotifyHwnd = BoofPack.INSTANCE.getHWNDByTitle("Spotify Premium");
 
         /**
          * As you listen, Spotify's window title changes.
@@ -47,7 +47,7 @@ public class Main {
          * until process exit.
         */
         for ( ;; ) {
-            System.out.println(BoofPack.INSTANCE.get_title_by_hwnd(spotifyHwnd));
+            System.out.println(BoofPack.INSTANCE.getTitleByHWND(spotifyHwnd));
             Thread.sleep(200);
         }
     }
@@ -57,7 +57,7 @@ public class Main {
 What about unsigned integers?
 ```java
 String hashMe = "hash me";
-byte[] bytes = ByteBuffer.allocate(4).putInt(BoofPack.INSTANCE.hash_xxh32(hashMe)).array();
+byte[] bytes = ByteBuffer.allocate(4).putInt(BoofPack.INSTANCE.hashXXH32(hashMe)).array();
 int unprocessedHash = ByteBuffer.wrap(bytes).getInt();
 long processedHash = Integer.toUnsignedLong(hashedStr);
 ```
