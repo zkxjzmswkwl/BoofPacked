@@ -1,20 +1,20 @@
 #include "pch.h"
 #include <Windows.h>
 #include <iostream>
-#include "xxhash.h"
+//#include "xxhash.h"
 
 // Uncomment to enable use of the Interception driver.
 //#define _INTERCEPTION_SUPPORT
+//
+//#ifdef _INTERCEPTION_SUPPORT
+//#include "interception.h"
+//#endif
 
-#ifdef _INTERCEPTION_SUPPORT
-#include "interception.h"
-#endif
-
-extern "C" __declspec(dllexport)
-void moveMouseRel(int x, int y)
-{
-    mouse_event(1, x, y, 0, 0);
-}
+//extern "C" __declspec(dllexport)
+//void moveMouseRel(int x, int y)
+//{
+//    mouse_event(1, x, y, 0, 0);
+//}
 
 extern "C" __declspec(dllexport)
 bool asyncKeystate(int key)
@@ -39,6 +39,7 @@ HWND getHWNDByTitle(char* windowTitle)
 extern "C" __declspec(dllexport)
 HANDLE getHandleByTitle(char* windowTitle)
 {
+
     HWND hwnd = FindWindowA(0, windowTitle);
     if (!hwnd)  return NULL;
 
@@ -49,6 +50,12 @@ HANDLE getHandleByTitle(char* windowTitle)
     if (!hproc) return NULL;
 
     return hproc;
+}
+
+extern "C" __declspec(dllexport)
+void setWindowLoc(HWND hWnd, int x, int y, int cx, int cy)
+{
+    SetWindowPos(hWnd, NULL, x, y, cx, cy, NULL);
 }
 
 extern "C" __declspec(dllexport)
@@ -72,52 +79,52 @@ const char* getActiveWindowTitle()
     return _strdup("Nope.avi");
 }
 
-extern "C" __declspec(dllexport)
-void readProcMem(char* title, uintptr_t start_loc, uintptr_t out)
-{
-    HWND hwnd = FindWindowA(0, title);
-    DWORD pid;
+//extern "C" __declspec(dllexport)
+//void readProcMem(char* title, uintptr_t start_loc, uintptr_t out)
+//{
+//    HWND hwnd = FindWindowA(0, title);
+//    DWORD pid;
+//
+//    if (!hwnd)      return;
+//    GetWindowThreadProcessId(hwnd, &pid);
+//    HANDLE h = OpenProcess(PROCESS_VM_READ, 0, pid);
+//
+//    if (!h)     return;
+//    ReadProcessMemory(h, (LPCVOID)start_loc, &out, sizeof(out), NULL);
+//}
 
-    if (!hwnd)      return;
-    GetWindowThreadProcessId(hwnd, &pid);
-    HANDLE h = OpenProcess(PROCESS_VM_READ, 0, pid);
+//extern "C" __declspec(dllexport)
+//uint32_t hashXXH32(char* to_hash)
+//{
+//    return XXH32(to_hash, strlen(to_hash), 77777UL);
+//}
 
-    if (!h)     return;
-    ReadProcessMemory(h, (LPCVOID)start_loc, &out, sizeof(out), NULL);
-}
-
-extern "C" __declspec(dllexport)
-uint32_t hashXXH32(char* to_hash)
-{
-    return XXH32(to_hash, strlen(to_hash), 77777UL);
-}
-
-#ifdef _INTERCEPTION_SUPPORT
-extern "C" __declspec(dllexport)
-void interception_click()
-{
-    InterceptionContext context;
-    context = interception_create_context();
-    InterceptionMouseStroke mouse_stroke[2];
-    ZeroMemory(mouse_stroke, sizeof(mouse_stroke));
-    mouse_stroke[0].state = INTERCEPTION_MOUSE_LEFT_BUTTON_DOWN;
-    mouse_stroke[1].state = INTERCEPTION_MOUSE_LEFT_BUTTON_DOWN;
-    interception_send(context, INTERCEPTION_MOUSE(0), (InterceptionStroke*)mouse_stroke, 1);
-    interception_destroy_context(context);
-}
-
-extern "C" __declspec(dllexport)
-void fuck()
-{
-    InterceptionContext context;
-    context = interception_create_context();
-
-    InterceptionMouseStroke mouse_stroke[2];
-    ZeroMemory(mouse_stroke, sizeof(mouse_stroke));
-    mouse_stroke[0].state = INTERCEPTION_MOUSE_LEFT_BUTTON_UP;
-    mouse_stroke[1].state = INTERCEPTION_MOUSE_LEFT_BUTTON_UP;
-    //mouse_stroke[1].state = INTERCEPTION_MOUSE_LEFT_BUTTON_UP;
-    interception_send(context, INTERCEPTION_MOUSE(0), (InterceptionStroke*)mouse_stroke, 1);
-    interception_destroy_context(context);
-}
-#endif
+//#ifdef _INTERCEPTION_SUPPORT
+//extern "C" __declspec(dllexport)
+//void interception_click()
+//{
+//    InterceptionContext context;
+//    context = interception_create_context();
+//    InterceptionMouseStroke mouse_stroke[2];
+//    ZeroMemory(mouse_stroke, sizeof(mouse_stroke));
+//    mouse_stroke[0].state = INTERCEPTION_MOUSE_LEFT_BUTTON_DOWN;
+//    mouse_stroke[1].state = INTERCEPTION_MOUSE_LEFT_BUTTON_DOWN;
+//    interception_send(context, INTERCEPTION_MOUSE(0), (InterceptionStroke*)mouse_stroke, 1);
+//    interception_destroy_context(context);
+//}
+//
+//extern "C" __declspec(dllexport)
+//void fuck()
+//{
+//    InterceptionContext context;
+//    context = interception_create_context();
+//
+//    InterceptionMouseStroke mouse_stroke[2];
+//    ZeroMemory(mouse_stroke, sizeof(mouse_stroke));
+//    mouse_stroke[0].state = INTERCEPTION_MOUSE_LEFT_BUTTON_UP;
+//    mouse_stroke[1].state = INTERCEPTION_MOUSE_LEFT_BUTTON_UP;
+//    //mouse_stroke[1].state = INTERCEPTION_MOUSE_LEFT_BUTTON_UP;
+//    interception_send(context, INTERCEPTION_MOUSE(0), (InterceptionStroke*)mouse_stroke, 1);
+//    interception_destroy_context(context);
+//}
+//#endif
