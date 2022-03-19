@@ -27,6 +27,18 @@ public interface BoofPack extends Library {
 
     // See example for this
     int hashXXH32(String to_hash);
+
+    // https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos
+    void setWindowLoc(PointerByReference hwnd, int x, int y, int cx, int cy);
+
+    // https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowtexta
+    void setWindowText(PointerByReference hwnd, String text);
+
+    // https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessa
+    void spawnProcess(String executablePath);
+
+    // https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setfocus
+    void setFocusedWindow(PointerByReference hwnd);
 }
 ```
 

@@ -59,6 +59,26 @@ void setWindowLoc(HWND hWnd, int x, int y, int cx, int cy)
 }
 
 extern "C" __declspec(dllexport)
+void setWindowText(HWND hWnd, char* text)
+{
+    SetWindowTextA(hWnd, text);
+}
+
+extern "C" __declspec(dllexport)
+void setFocusedWindow(HWND hWnd)
+{
+    SetFocus(hWnd);
+}
+
+extern "C" __declspec(dllexport)
+void spawnProcess(char* executablePath)
+{
+    STARTUPINFO info = { sizeof(info) };
+    PROCESS_INFORMATION processInfo;
+    CreateProcessA(executablePath, NULL, NULL, NULL, TRUE, 0, NULL, NULL, (LPSTARTUPINFOA)&info, &processInfo);
+}
+
+extern "C" __declspec(dllexport)
 const char* getTitleByHWND(HWND hwnd)
 {
     char out[256];
